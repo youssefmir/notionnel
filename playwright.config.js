@@ -22,7 +22,7 @@ export default defineConfig({
     trace: 'retain-on-failure',
   },
   webServer: {
-    command: 'npm run preview -- --host 127.0.0.1 --port ' + port,
+    command: 'npm run preview -- --ignore-lock --host 127.0.0.1 --port ' + port,
     url: baseURL,
     reuseExistingServer: !process.env.CI,
     env: { ASTRO_TELEMETRY_DISABLED: '1' },

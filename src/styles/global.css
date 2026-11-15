@@ -1365,3 +1365,34 @@ svg {
   max-width: 620px;
   border-radius: 8px;
 }
+
+.module-nav-group + .module-nav-group {
+  margin-top: 16px;
+}
+.further-reading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 24px;
+  padding: 24px;
+  margin-top: 24px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 9px;
+}
+.further-reading > div {
+  flex: 1 1 320px;
+}
+.further-reading h2 {
+  font: 500 28px/1.15 var(--serif);
+  letter-spacing: -.035em;
+  margin: 7px 0 4px;
+}
+.further-reading div > p:last-child {
+  color: var(--muted);
+  font-size: 13px;
+}
+.further-done {
+  color: var(--green);
+  font-size: 12px;
+}

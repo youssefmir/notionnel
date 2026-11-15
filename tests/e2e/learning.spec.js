@@ -94,3 +94,30 @@ test('Un stockage indisponible laisse le quiz et son corrigé utilisables', asyn
   await expect(form.locator('[data-explanation]:visible')).toHaveCount(3);
   await expect(page.locator('[data-progress-count]').first()).toHaveText('1');
 });
+
+test('La progression des six modules reste acquise après la validation de l’option facultative', async ({ page }) => {
+  await page.goto('./');
+  await page.evaluate(() => localStorage.setItem('atelier-des-derives:progress:v1', '[1,2,3,4,5,6]'));
+  await page.goto('modules/options-exotiques/');
+  const meter = page.locator('[role="progressbar"]').first();
+  await expect(page.locator('[data-progress-count]').first()).toHaveText('6');
+  await expect(meter).toHaveAttribute('aria-valuenow', '100');
+
+  const form = page.locator('[data-quiz-form]');
+  await answerQuestions(form, [2, 0, 1]);
+  await form.getByRole('button', { name: 'Vérifier mes réponses' }).click();
+  await expect(form.locator('[data-quiz-status]')).toContainText('3 / 3. Module validé');
+  expect(await page.evaluate(() => JSON.parse(localStorage.getItem('atelier-des-derives:progress:v1'))))
+    .toEqual([1, 2, 3, 4, 5, 6, 7]);
+  await page.reload();
+  await expect(page.locator('[data-module-id="7"]').first()).toHaveClass(/is-complete/);
+  await expect(page.locator('[data-progress-count]').first()).toHaveText('6');
+  await expect(meter).toHaveAttribute('aria-valuenow', '100');
+
+  await page.goto('glossaire/');
+  const root = page.locator('[data-glossary]');
+  await root.getByRole('combobox', { name: 'Filtrer par module' }).selectOption('7');
+  await expect(root.locator('[data-entry]:visible')).toHaveCount(5);
+  await root.getByRole('searchbox', { name: 'Rechercher un terme' }).fill('Asian');
+  await expect(root.locator('[data-entry]:visible')).toHaveAttribute('id', 'option-asiatique');
+});

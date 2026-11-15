@@ -48,5 +48,11 @@ export const labels: Record<number, { short: string; name: string; desc: string;
     desc: 'Explorer la volatilité et les sensibilités d’une option, sans commencer par une équation.',
     category: 'Les risques',
   },
+  7: {
+    short: 'Options exotiques',
+    name: 'Quand le chemin du prix compte',
+    desc: 'Une même action peut emprunter deux chemins et finir au même prix. Découvrez pourquoi une option à barrière peut payer dans un cas et s’éteindre dans l’autre.',
+    category: 'Approfondissement',
+  },
 };
 export const pad = (n: number) => String(n).padStart(2, '0');

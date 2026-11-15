@@ -10,6 +10,7 @@ const modules = defineCollection({
     subtitle: z.string().min(1),
     minutes: z.number().int().positive(),
     chapter: z.string().min(1),
+    optional: z.boolean().default(false),
   }),
 });
 export const collections = { modules };

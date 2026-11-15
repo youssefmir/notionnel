@@ -1,12 +1,13 @@
 # Écrire une nouvelle leçon
 
-Les six modules du parcours contiennent chacun une leçon complète en Markdown. Pour développer un autre chapitre du manuel, partez de l’exemple ci-dessous. Le premier titre appartient aux métadonnées. Les titres de niveau deux structurent ensuite la lecture, et les citations commençant par **Analogie** ou **À retenir** deviennent des encadrés.
+Les leçons sont écrites en Markdown. Pour développer un autre chapitre, partez de l’exemple ci-dessous. Le premier titre appartient aux métadonnées. Les titres de niveau deux structurent ensuite la lecture, et les citations commençant par **Analogie** ou **À retenir** deviennent des encadrés.
 
 L’exemple porte sur le chapitre 3 et peut servir de point de départ à une leçon consacrée au risque de base. Avant de le publier, attribuez au module un identifiant et une adresse uniques, complétez le parcours et son quiz, puis vérifiez les liens du glossaire et le déploiement sous sous-chemin.
 
 ```markdown
 ---
-id: 7
+id: 8
+optional: true
 slug: 'risque-de-base'
 title: 'Pourquoi une couverture peut-elle être imparfaite ?'
 subtitle: 'Comparer le prix local du blé au prix du contrat utilisé pour le couvrir.'

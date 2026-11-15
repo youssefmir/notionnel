@@ -13,9 +13,9 @@ npm run dev
 
 Ouvrez l’adresse affichée dans le terminal, habituellement [localhost:4321](http://localhost:4321/). Les modifications de leçons apparaissent dans le navigateur pendant le développement. Pour démarrer avec les versions exactes du fichier de verrouillage sur une machine neuve, utilisez `npm ci` à la place de `npm install`. Le site fonctionne sans compte, clé d’API ni base de données.
 
-## Parcours et référence théorique
+## Parcours et livres de référence
 
-Les six modules s’appuient sur John C. Hull, *Options, futures et autres actifs dérivés*, 10e édition française, Pearson France, 2017. Ils proposent des textes, des illustrations et des exemples originaux. Le manuel reste une référence bibliographique externe au dépôt. Chaque leçon indique les sections utilisées. Les pages imprimées figurent dans la [table de correspondance](docs/SOURCES.md).
+Les six modules de base s’appuient sur John C. Hull, *Options, futures et autres actifs dérivés*, 10e édition française, Pearson France, 2017. Ils proposent des textes, des illustrations et des exemples originaux. Le manuel reste une référence bibliographique externe au dépôt. Chaque leçon indique les sections utilisées. Les pages imprimées figurent dans la [table de correspondance](docs/SOURCES.md).
 
 | Module | Question abordée | Chapitres de Hull |
 | --- | --- | --- |
@@ -26,7 +26,9 @@ Les six modules s’appuient sur John C. Hull, *Options, futures et autres actif
 | 5. Les swaps | Quels paiements s’échangent quand on passe d’un taux variable à un taux fixe ou d’une devise à une autre ? | 7 |
 | 6. La gestion des risques | Comment le cours, le temps et la volatilité influencent-ils la prime d’une option ? | 15 et 19 |
 
-Les trois questions de chaque quiz sont accompagnées d’un corrigé. Deux bonnes réponses valident le module. Le thème et la liste des modules validés sont conservés dans le stockage local du navigateur. La progression reste dans ce profil de navigateur, sur le même domaine. Effacer les données du site la remet à zéro.
+Le module 7, facultatif, prolonge ce parcours avec Mohamed Bouzoubaa et Adel Osseiran, *Exotic Options and Hybrids: A Guide to Structuring, Pricing and Trading* (Wiley, 2010). La leçon part de deux trajectoires qui finissent au même prix et compare les paiements d’un call ordinaire, d’un call à barrière et d’un call sur moyenne. Le lecteur peut modifier une clôture pour observer l’effet du seuil. [Lire le module sur les options exotiques](src/content/modules/07.md).
+
+Les trois questions de chaque quiz sont accompagnées d’un corrigé. Deux bonnes réponses valident le module. La jauge de progression porte sur les six modules de base. Le module facultatif affiche sa propre validation. Le thème et la liste des modules validés sont conservés dans le stockage local du navigateur. La progression reste dans ce profil de navigateur, sur le même domaine. Effacer les données du site la remet à zéro.
 
 Le glossaire accepte les termes français, leurs variantes sans accents et des équivalents anglais. Dans une leçon, un terme souligné permet d’obtenir sa définition ou d’ouvrir l’entrée correspondante. Le simulateur couvre l’achat et la vente d’un call ou d’un put. Les réglages portent sur le prix d’exercice, la prime et le cours du sous-jacent **à l’échéance**. Pour essayer, achetez un call de prix d’exercice 50 € pour 3 €. À 52 €, l’exercice rapporte 2 €, mais le résultat après prime est de −1 € par action.
 
@@ -109,5 +111,5 @@ git push -u origin main
 1. Partez d’un fichier de `src/content/modules/` ou du [modèle Markdown commenté](docs/modele-module.md). Attribuez un numéro et un slug uniques. Conservez le numéro d’un module existant, car il identifie sa progression.
 2. Ouvrez sur une situation concrète, puis introduisez le vocabulaire et un exemple chiffré. Utilisez `> **Analogie**`, `> **À retenir**` et `[prime](glossaire:prime)` pour les encadrés et les termes. Vérifiez les renvois au manuel dans la section finale.
 3. Ajoutez les entrées de glossaire et le libellé de module dans `src/data/glossary.js`, puis trois questions et leurs explications dans `src/data/quizzes.js`. Les indices des bonnes réponses commencent à zéro.
-4. Reportez le chapitre dans `docs/SOURCES.md` et adaptez les libellés du catalogue dans `src/lib/catalog.ts`. En cas d’ajout d’un septième module, actualisez aussi les textes indiquant « six » sur l’accueil et dans la documentation.
+4. Reportez le chapitre dans `docs/SOURCES.md` et adaptez les libellés du catalogue dans `src/lib/catalog.ts`. Ajoutez `optional: true` aux métadonnées d’un approfondissement facultatif. Son quiz est enregistré séparément du compteur des modules de base.
 5. Lancez les tests et la compilation. Vérifiez le quiz, ses explications, les liens du glossaire et la navigation mobile sur le résultat compilé.

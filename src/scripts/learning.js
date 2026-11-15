@@ -29,13 +29,16 @@ export function getCompleted() {
 
 function syncProgress() {
   const completed = getCompleted();
-  const percent = Math.round((completed.length / knownIds.length) * 100);
+  const track = document.querySelector('[data-progress-track-ids]');
+  const coreIds = track?.dataset.progressTrackIds.split(',').map(Number) ?? [];
+  const completedCoreCount = coreIds.filter((id) => completed.includes(id)).length;
+  const percent = coreIds.length ? Math.round((completedCoreCount / coreIds.length) * 100) : 0;
   for (const meter of document.querySelectorAll('[data-progress-bar]')) {
     meter.style.width = percent + '%';
     (meter.closest('[role="progressbar"]') ?? meter).setAttribute('aria-valuenow', String(percent));
   }
   for (const count of document.querySelectorAll('[data-progress-count]'))
-    count.textContent = String(completed.length);
+    count.textContent = String(completedCoreCount);
   for (const label of document.querySelectorAll('[data-progress-percent]'))
     label.textContent = percent + ' %';
   for (const item of document.querySelectorAll('[data-module-id]')) {

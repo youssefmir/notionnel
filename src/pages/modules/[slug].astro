@@ -2,6 +2,7 @@
 import { render } from 'astro:content';
 import { ArrowLeft, ArrowRight, Clock3, BookOpen, SlidersHorizontal } from '@lucide/astro';
 import Layout from '../../layouts/Layout.astro';
+import PathExample from '../../components/PathExample.astro';
 import { catalog, modulePath, pathTo, pad, labels } from '../../lib/catalog';
 import { renderQuiz } from '../../lib/learning-view.js';
 export async function getStaticPaths() {
@@ -23,7 +24,8 @@ const prev = mods[index - 1]?.data;
     </a>
     <header class="lesson-title">
       <div class="eyebrow mono">
-        <span></span> Module {pad(m.id)} <i>/</i> {labels[m.id]?.category || 'Approfondissement'}
+        <span></span> Module {pad(m.id)} <i>/</i>{' '}
+        {m.optional ? 'Approfondissement facultatif' : labels[m.id]?.category}
       </div>
       <h1>{m.title}</h1>
       <p>{m.subtitle}</p>
@@ -43,6 +45,7 @@ const prev = mods[index - 1]?.data;
         <article class="prose">
           <Content />
         </article>
+        {m.slug === 'options-exotiques' && <PathExample />}
         {m.id === 4 && (
           <div class="mini-lab">
             <SlidersHorizontal size={24} />
@@ -62,7 +65,7 @@ const prev = mods[index - 1]?.data;
             {prev ? 'Module précédent' : 'Vue d’ensemble'}
           </a>
           <a href={next ? modulePath(next.slug) : pathTo() + '#parcours'}>
-            {next ? 'Module suivant' : 'Revoir le parcours'}
+            {next?.optional ? 'Approfondissement facultatif' : next ? 'Module suivant' : 'Revoir le parcours'}
             <ArrowRight size={15} />
           </a>
         </nav>
@@ -77,6 +80,11 @@ const prev = mods[index - 1]?.data;
                 <a href={'#' + h.slug}>{h.text}</a>
               </li>
             ))}
+          {m.slug === 'options-exotiques' && (
+            <li>
+              <a href="#experience-barriere">Essayer deux trajectoires</a>
+            </li>
+          )}
           <li>
             <a href="#quiz">Tester ma compréhension</a>
           </li>

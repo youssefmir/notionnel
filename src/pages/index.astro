@@ -4,7 +4,9 @@ import Layout from '../layouts/Layout.astro';
 import Relief from '../components/Relief.astro';
 import Plate from '../components/Plate.astro';
 import { catalog, modulePath, pathTo, pad, labels } from '../lib/catalog';
-const modules = await catalog();
+const entries = await catalog();
+const modules = entries.filter(({ data }) => !data.optional);
+const extensions = entries.filter(({ data }) => data.optional);
 const minutes = modules.reduce((s, m) => s + m.data.minutes, 0);
 ---
 
@@ -40,11 +42,11 @@ const minutes = modules.reduce((s, m) => s + m.data.minutes, 0);
     <div class="course-strip">
       <span>
         <BookOpen size={16} />
-        <b>{modules.length} modules</b>
+        <b>{modules.length} modules de base</b>
       </span>
       <span>
         <Clock3 size={16} />
-        <b>{minutes} min</b> de lecture
+        <b>{minutes} min</b> pour les bases
       </span>
       <span>
         <ListChecks size={17} />
@@ -91,6 +93,21 @@ const minutes = modules.reduce((s, m) => s + m.data.minutes, 0);
         })}
       </div>
     </section>
+    {extensions.map(({ data: m }) => (
+      <section class="further-reading" data-module-id={m.id}>
+        <div>
+          <p class="eyebrow mono">Lecture facultative · {m.minutes} min</p>
+          <h2>{labels[m.id]?.name || m.title}</h2>
+          <p>{labels[m.id]?.desc || m.subtitle}</p>
+        </div>
+        <a class="solid-button" href={modulePath(m.slug)}>
+          Lire le module {pad(m.id)} <ArrowRight size={16} />
+        </a>
+        <span class="further-done" data-completion-mark={m.id} hidden>
+          Module validé
+        </span>
+      </section>
+    ))}
     <section class="practice-banner">
       <div class="banner-icon">
         <ChartNoAxesCombined size={27} />
@@ -113,7 +130,7 @@ const minutes = modules.reduce((s, m) => s + m.data.minutes, 0);
       const next = items.find((el) => !done.includes(Number(el.dataset.courseHref)));
       const a = document.querySelector<HTMLAnchorElement>('#start-course');
       if (!a) return;
-      if (!done.length) {
+      if (!items.some((el) => done.includes(Number(el.dataset.courseHref)))) {
         a.href = items[0].href;
         a.querySelector('span')!.textContent = 'Commencer le parcours';
         return;

@@ -6,6 +6,7 @@ export const moduleLabels = {
   4: 'Les options',
   5: 'Les swaps',
   6: 'La gestion des risques',
+  7: 'Les options exotiques',
 };
 
 export const glossary = [
@@ -381,6 +382,56 @@ export const glossary = [
       'Un modèle qui relie le prix théorique d’une option européenne aux caractéristiques du contrat et du marché. Il repose sur des hypothèses, notamment une volatilité constante dans sa version de base.',
     example:
       'Pour évaluer un call européen sur une action sans dividende, on renseigne son cours, le prix d’exercice, la durée restante, le taux sans risque et la volatilité.',
+  },
+  {
+    slug: 'option-exotique',
+    term: 'Option exotique',
+    module: 7,
+    aliases: 'exotic option options exotiques non standard',
+    definition:
+      'Une option dont les règles diffèrent de celles d’un call ou d’un put classique. Par exemple, le versement peut dépendre de plusieurs cours observés pendant la vie du contrat.',
+    example:
+      'Un call classique peut donner 10 € si l’action finit à 110 € pour un prix d’exercice de 100 €. Une clause de barrière peut supprimer ce versement selon le chemin suivi.',
+  },
+  {
+    slug: 'option-a-barriere',
+    term: 'Option à barrière',
+    module: 7,
+    aliases: 'barrier option knock-in knock-out activante désactivante',
+    definition:
+      'Une option dont le droit d’exercice apparaît ou disparaît selon qu’un cours atteint un seuil convenu. Le contrat précise le seuil, le sens du franchissement et les moments où le cours est observé.',
+    example:
+      'Pour une barrière haute de 120 € observée uniquement aux clôtures mensuelles, un sommet à 122 € entre deux observations ne suffit pas, à lui seul, à déclencher la barrière.',
+  },
+  {
+    slug: 'barriere-desactivante',
+    term: 'Barrière désactivante',
+    module: 7,
+    aliases: 'knock-out knock out KO extinction barrière haute ou basse up-and-out down-and-out',
+    definition:
+      'Un seuil qui met fin à l’option lorsque la condition prévue est satisfaite. Un versement à l’extinction n’existe que si le contrat en prévoit un.',
+    example:
+      'Avec une barrière haute de 120 € désactivante dès qu’une clôture observée atteint ce niveau, une clôture à 120 € éteint l’option. Un retour à 114 € ne la réactive pas.',
+  },
+  {
+    slug: 'option-asiatique',
+    term: 'Option asiatique',
+    module: 7,
+    aliases: 'Asian option average price option moyenne de cours',
+    definition:
+      'Une option dont le paiement dépend d’une moyenne de cours observés aux dates prévues. Pour un call sur moyenne à prix d’exercice fixe, on reçoit l’excédent éventuel de cette moyenne sur le prix d’exercice.',
+    example:
+      'Si la moyenne retenue vaut 106 € et le prix d’exercice 100 €, le call sur moyenne verse 6 € par action, avant déduction de la prime.',
+  },
+  {
+    slug: 'moyenne-arithmetique',
+    term: 'Moyenne arithmétique',
+    module: 7,
+    aliases: 'arithmetic average moyenne arithmétique équipondérée observations',
+    definition:
+      'Pour des observations de même poids, on additionne les valeurs et on divise par leur nombre. Les dates et les poids retenus sont définis dans le contrat.',
+    example:
+      'Trois clôtures à 90 €, 105 € et 120 € de même poids donnent une moyenne de (90 + 105 + 120) ÷ 3 = 105 €.',
   },
 ].sort((a, b) => a.term.localeCompare(b.term, 'fr'));
 

@@ -194,6 +194,36 @@ export const quizzes = {
         'Le modèle relie les caractéristiques de l’option et du marché à un prix théorique. Si les hypothèses s’écartent du marché réel, le prix observé peut différer.',
     },
   ],
+  7: [
+    {
+      question:
+        'Deux chemins amènent une action à 114 €. Vous connaissez les règles du call à barrière haute désactivante. Quelle donnée vous manque pour calculer son versement ?',
+      choices: [
+        'Le nombre d’actionnaires.',
+        'La prime du call le jour de l’achat.',
+        'Les cours aux moments prévus pour observer la barrière.',
+      ],
+      answer: 2,
+      explanation:
+        'Il faut vérifier si la barrière a été atteinte à une date d’observation. Cela a pu se produire sur un des deux chemins seulement, même si l’action finit au même prix.',
+    },
+    {
+      question:
+        'Un call de prix d’exercice 100 € s’éteint sans remboursement si une clôture mensuelle atteint ou dépasse 120 €. La deuxième clôture est à 120 € et la dernière à 114 €. Que verse le contrat à l’échéance ?',
+      choices: ['0 €.', '14 €.', '20 €.'],
+      answer: 0,
+      explanation:
+        'La clôture à 120 € a suffi à désactiver le call. Même si le cours revient à 114 €, le droit est éteint. La prime payée reste une dépense pour l’acheteur.',
+    },
+    {
+      question:
+        'Un call asiatique de prix d’exercice 100 € retient trois clôtures de même poids à 96 €, 108 € et 120 €. Quel est le versement brut par action ?',
+      choices: ['20 €.', '8 €.', '108 €.'],
+      answer: 1,
+      explanation:
+        'La moyenne vaut (96 + 108 + 120) ÷ 3 = 108 €. Le call verse 108 − 100 = 8 €. Pour calculer le résultat net de l’acheteur, on retranche ensuite la prime.',
+    },
+  ],
 };
 
 export function gradeQuiz(id, answers) {

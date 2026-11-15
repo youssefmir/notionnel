@@ -1,0 +1,259 @@
+---
+const strike = 100;
+const barrier = 120;
+const premium = 4;
+const pathA = [100, 110, 114];
+const pathB = [120, 96, 114];
+const european = Math.max(0, pathA[pathA.length - 1] - strike);
+const payoff = (path: number[]) => (path.some((price) => price >= barrier) ? 0 : european);
+const amount = (value: number, showSign = false) =>
+  `${showSign && value > 0 ? '+' : ''}${value.toLocaleString('fr-FR')} €`;
+const grossA = payoff(pathA);
+const grossB = payoff(pathB);
+---
+
+<figure
+  class="path-example"
+  id="experience-barriere"
+  data-barrier={barrier}
+  data-premium={premium}
+  data-vanilla={european}
+>
+  <figcaption>
+    <h2>Deux chemins vers le même cours final</h2>
+    <p>
+      L’action vaut 100 € au départ et 114 € à l’échéance dans les deux scénarios. Chaque call donne le droit
+      d’acheter une action à {amount(strike)}. Le call à barrière s’éteint sans remboursement dès qu’une des
+      trois clôtures mensuelles atteint ou dépasse {amount(barrier)}. Le premier cours observé est celui de la
+      fin du premier mois.
+    </p>
+  </figcaption>
+
+  <table>
+    <caption>Cours observés aux trois clôtures mensuelles</caption>
+    <thead>
+      <tr>
+        <th scope="col">Clôture</th>
+        <th scope="col">Trajet A</th>
+        <th scope="col">Trajet B</th>
+      </tr>
+    </thead>
+    <tbody>
+      {pathA.map((price, i) => (
+        <tr>
+          <th scope="row">{i === 2 ? '3 · échéance' : i + 1}</th>
+          <td>{amount(price)}</td>
+          <td data-path-observation data-adjustable={i === 0 ? '' : undefined} data-price={pathB[i]}>
+            {amount(pathB[i])}
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+
+  <div class="path-control" hidden>
+    <div>
+      <label for="cours-trajet-b">Première clôture du trajet B</label>
+      <output for="cours-trajet-b">{amount(pathB[0])}</output>
+    </div>
+    <input
+      type="range"
+      id="cours-trajet-b"
+      min="90"
+      max="135"
+      step="1"
+      value={pathB[0]}
+      aria-valuetext={amount(pathB[0])}
+      aria-describedby="consigne-barriere"
+    />
+    <p id="consigne-barriere">Essayez 119 €, puis 120 €, et comparez les résultats.</p>
+  </div>
+
+  <table class="outcomes">
+    <caption>Résultats par action à l’échéance</caption>
+    <thead>
+      <tr>
+        <th scope="col">Pour l’acheteur</th>
+        <th scope="col">Trajet A</th>
+        <th scope="col">Trajet B</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">Call classique · brut</th>
+        <td>{amount(european)}</td>
+        <td>{amount(european)}</td>
+      </tr>
+      <tr>
+        <th scope="row">Call classique · net</th>
+        <td>{amount(european - premium, true)}</td>
+        <td>{amount(european - premium, true)}</td>
+      </tr>
+      <tr>
+        <th scope="row">Call à barrière · brut</th>
+        <td>{amount(grossA)}</td>
+        <td data-knockout-gross>{amount(grossB)}</td>
+      </tr>
+      <tr>
+        <th scope="row">Call à barrière · net</th>
+        <td>{amount(grossA - premium, true)}</td>
+        <td data-knockout-net>{amount(grossB - premium, true)}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p class="path-feedback" role="status" aria-live="polite" aria-atomic="true">
+    Trajet B : à la première clôture, {amount(pathB[0])} atteint exactement la barrière. Le call à barrière
+    s’éteint. Son résultat net est de {amount(grossB - premium, true)}.
+  </p>
+  <p class="path-note">
+    Le brut est le montant versé à l’échéance. Pour comparer les deux calculs nets, on fixe ici la prime à{' '}
+    {amount(premium)} par contrat. Cette prime est fixée pour l’exercice. En pratique, la barrière entre aussi
+    dans le calcul de la prime. Les calculs excluent frais et intérêts.
+  </p>
+</figure>
+
+<script>
+  for (const figure of document.querySelectorAll<HTMLElement>('.path-example')) {
+    const input = figure.querySelector<HTMLInputElement>('input[type="range"]')!;
+    const control = figure.querySelector<HTMLElement>('.path-control')!;
+    const output = figure.querySelector<HTMLOutputElement>('output')!;
+    const editablePrice = figure.querySelector<HTMLElement>('[data-adjustable]')!;
+    const observations = [...figure.querySelectorAll<HTMLElement>('[data-path-observation]')];
+    const grossCell = figure.querySelector<HTMLElement>('[data-knockout-gross]')!;
+    const netCell = figure.querySelector<HTMLElement>('[data-knockout-net]')!;
+    const feedback = figure.querySelector<HTMLElement>('.path-feedback')!;
+    const barrier = Number(figure.dataset.barrier);
+    const premium = Number(figure.dataset.premium);
+    const vanilla = Number(figure.dataset.vanilla);
+    const currency = new Intl.NumberFormat('fr-FR', {
+      style: 'currency',
+      currency: 'EUR',
+      maximumFractionDigits: 0,
+    });
+
+    input.addEventListener('input', () => {
+      const price = input.valueAsNumber;
+      const label = currency.format(price);
+      editablePrice.dataset.price = String(price);
+      editablePrice.textContent = label;
+      output.value = label;
+      input.setAttribute('aria-valuetext', label);
+      const hit = observations.some((cell) => Number(cell.dataset.price) >= barrier);
+      const gross = hit ? 0 : vanilla;
+      const net = gross - premium;
+      const netLabel = (net > 0 ? '+' : '') + currency.format(net);
+      grossCell.textContent = currency.format(gross);
+      netCell.textContent = netLabel;
+      const decision = hit
+        ? `À la première clôture, ${label} ${price === barrier ? 'atteint' : 'dépasse'} la barrière. Le call à barrière s’éteint.`
+        : 'Les trois clôtures restent sous la barrière. Le call à barrière reste actif jusqu’à l’échéance.';
+      feedback.textContent = `Trajet B : ${decision} Son résultat net est de ${netLabel}.`;
+    });
+    control.hidden = false;
+  }
+</script>
+
+<style>
+  .path-example {
+    margin: 2rem 0;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: clamp(1rem, 3vw, 1.8rem);
+    background: var(--surface);
+  }
+  h2 {
+    color: var(--ink);
+    font: inherit;
+    font-family: var(--serif, Georgia, serif);
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    line-height: 1.13;
+    margin: 0 0 0.6rem;
+  }
+  p {
+    margin: 0;
+    color: var(--ink);
+    line-height: 1.6;
+  }
+  figcaption p,
+  .path-feedback {
+    font-size: 0.94rem;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.1rem 0;
+    font-size: 0.88rem;
+    font-variant-numeric: tabular-nums;
+  }
+  caption {
+    font-size: 0.91rem;
+    text-align: left;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 0.3rem;
+  }
+  td,
+  th {
+    border-bottom: 1px solid var(--line);
+    padding: 0.38rem 0.2rem;
+    text-align: right;
+    vertical-align: middle;
+  }
+  tr > :first-child {
+    text-align: left;
+  }
+  thead {
+    color: var(--muted);
+  }
+  thead th {
+    font-weight: 650;
+  }
+  tbody th {
+    font-weight: 500;
+  }
+  [data-adjustable],
+  [data-knockout-net] {
+    color: var(--blue);
+    font-weight: 700;
+  }
+  .path-control {
+    background: var(--soft);
+    border-radius: 0.5rem;
+    padding: 0.8rem 1rem;
+  }
+  .path-control div {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.4rem;
+    align-items: center;
+    font-size: 0.9rem;
+    font-weight: 650;
+  }
+  .path-control output {
+    color: var(--blue);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  input {
+    display: block;
+    width: 100%;
+    margin: 0.55rem 0;
+    accent-color: var(--blue);
+  }
+  input:focus-visible {
+    outline: 2px solid var(--blue);
+    outline-offset: 3px;
+  }
+  .path-control p,
+  .path-note {
+    color: var(--muted);
+    font-size: 0.8rem;
+  }
+  .path-feedback {
+    font-weight: 600;
+  }
+  .path-note {
+    margin-top: 0.5rem;
+  }
+</style>

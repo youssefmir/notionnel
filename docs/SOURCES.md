@@ -2,7 +2,7 @@
 
 John C. Hull, *Options, futures et autres actifs dérivés*, 10e édition française, Pearson France, 2017. Édition française dirigée par Patrick Roger avec Christophe Hénot et Laurent Deville. ISBN 978-2-3260-0156-5.
 
-Les références ci-dessous correspondent à l’édition française fournie pour ce projet. Les pages sont les **pages imprimées du livre**. Par exemple, le chapitre 1 commence à la page imprimée 1, qui est la 32e page du PDF. Les textes, montants, situations et illustrations du site ont été élaborés pour ce parcours. Le PDF du manuel n’est pas distribué avec le dépôt.
+Les références des six modules de base correspondent à l’édition française fournie pour ce projet. Les pages sont les **pages imprimées du livre**. Par exemple, le chapitre 1 commence à la page imprimée 1, qui est la 32e page du PDF. Les textes, montants, situations et illustrations du site ont été élaborés pour ce parcours. Le PDF du manuel n’est pas distribué avec le dépôt.
 
 | Module | Repères dans le manuel | Application dans la leçon |
 | --- | --- | --- |
@@ -12,6 +12,19 @@ Les références ci-dessous correspondent à l’édition française fournie pou
 | 4. Les options d’achat et de vente | Chapitre 10, §10.1, p. 207, §10.2, p. 210, et §10.3 à 10.4 ; chapitre 11, §11.1 à 11.3, à partir de la p. 231. | Séparer le montant brut reçu à l’échéance de la prime et du résultat net. Reconnaître les quatre positions du simulateur. |
 | 5. Les swaps de taux et de devises | Chapitre 7, p. 155 ; §7.1, p. 156 ; §7.7, p. 168 ; §7.8 et 7.9. | Retracer les intérêts à taux fixe et variable ; distinguer notionnel de calcul et capitaux échangés en devises. |
 | 6. Comprendre les risques d’une option | Chapitre 15, §15.4, p. 332, §15.5 à 15.8 et §15.11 ; chapitre 19, §19.4, p. 421 (delta), §19.5, p. 428 (thêta), §19.6, p. 430 (gamma), §19.8, p. 435 (véga), et §19.10 à 19.11. | Estimer des variations locales, indiquer les unités et les hypothèses, distinguer prime théorique et résultat final. |
+
+## Approfondissement avec Bouzoubaa et Osseiran
+
+Mohamed Bouzoubaa et Adel Osseiran, *Exotic Options and Hybrids: A Guide to Structuring, Pricing and Trading*, John Wiley & Sons, Ltd, 2010, ISBN 978-0-470-68803-8. Le chapitre 10 commence à la page imprimée 145, qui correspond à la page 167 du PDF fourni.
+
+| Objet de la lecture | Sections et pages imprimées | Application dans le module 7 |
+| --- | --- | --- |
+| Call ordinaire et option asiatique | §3.2, p. 32, et §3.9, p. 43–44 | Comparer le cours final et la moyenne arithmétique de trois clôtures pour un même prix d’exercice. |
+| Structuration | §3.10, p. 44 | Partir des dates d’achat d’une entreprise pour choisir les dates d’observation pertinentes. |
+| Barrière désactivante et surveillance | §10.1.1, p. 145, et §10.2.3, p. 154 | Faire varier une clôture et vérifier si le droit s’éteint à la barrière. |
+| Dérivé hybride | Chapitre 19, p. 295, et §19.1.1, p. 296 | Identifier deux risques de familles différentes, par exemple une matière première et une devise. |
+
+Les deux trajectoires de prix, le seuil de 120 € et la prime de 4 € sont des hypothèses pédagogiques propres au module. L’exercice calcule les paiements sur des trajectoires connues. L’évaluation d’une prime de marché demanderait notamment des hypothèses sur les trajectoires futures.
 
 ## Conventions du simulateur
 

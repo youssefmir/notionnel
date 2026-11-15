@@ -22,6 +22,7 @@ atelier-des-derives/
 │   │   └── profils-options.svg
 │   ├── components/
 │   │   ├── Brand.astro
+│   │   ├── PathExample.astro
 │   │   ├── Plate.astro
 │   │   └── Relief.astro
 │   ├── content/
@@ -31,7 +32,8 @@ atelier-des-derives/
 │   │       ├── 03.md
 │   │       ├── 04.md
 │   │       ├── 05.md
-│   │       └── 06.md
+│   │       ├── 06.md
+│   │       └── 07.md
 │   ├── data/
 │   │   ├── glossary.js
 │   │   └── quizzes.js
@@ -62,6 +64,7 @@ atelier-des-derives/
 │   └── content.config.ts
 ├── tests/
 │   ├── e2e/
+│   │   ├── exotiques.spec.js
 │   │   ├── learning.spec.js
 │   │   ├── simulator.spec.js
 │   │   └── site.spec.js

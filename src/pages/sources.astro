@@ -11,13 +11,27 @@ const modules = await catalog();
         <span></span> Notes de lecture
       </div>
       <h1>Sources et méthode</h1>
-      <p>Une référence théorique, des exemples conçus pour débuter.</p>
+      <p>Les lectures qui accompagnent les leçons et les expériences du site.</p>
     </header>
     <article class="prose source-article">
-      <h2>Le manuel de référence</h2>
+      <h2>Les bases avec John Hull</h2>
       <p>
         John C. Hull, <em>Options, futures et autres actifs dérivés</em>, 10ᵉ édition française, Pearson
-        France, 2017. ISBN : 978-2-3260-0156-5.
+        France, 2017. Les six premiers modules y puisent les règles des contrats, de leur évaluation et de
+        leur couverture.
+      </p>
+      <h2>La structuration avec Mohamed Bouzoubaa et Adel Osseiran</h2>
+      <p>
+        Dans <em>Exotic Options and Hybrids: A Guide to Structuring, Pricing and Trading</em>
+        (Wiley, 2010), les auteurs partent des clauses d’un contrat pour en étudier le paiement, le prix et
+        les risques. L’exemple de structuration du §3.10, p. 44, montre comment choisir des clauses selon
+        l’objectif poursuivi.
+      </p>
+      <p>
+        Le <a href={modulePath('options-exotiques')}>module facultatif sur les options exotiques</a>
+        s’appuie sur le §3.9, p. 43, pour les moyennes et sur les §10.1.1 et 10.2.3, p. 145 et 154, pour les
+        barrières et leurs dates d’observation. Le chapitre 19, p. 295, explique comment un même contrat peut
+        dépendre de plusieurs familles d’actifs, par exemple des actions et des devises.
       </p>
       <h2>Comment lire le parcours</h2>
       <p>
@@ -29,7 +43,7 @@ const modules = await catalog();
         <thead>
           <tr>
             <th>Étape</th>
-            <th>Repères dans le manuel</th>
+            <th>Repères de lecture</th>
           </tr>
         </thead>
         <tbody>
@@ -53,8 +67,10 @@ const modules = await catalog();
       </p>
       <h2>Votre progression</h2>
       <p>
-        Deux bonnes réponses sur trois valident un module. La progression et le thème sont mémorisés dans ce
-        navigateur, sans compte. Effacer les données du site efface également cette progression.
+        Deux bonnes réponses sur trois valident un module. Le compteur suit les six modules de base. La
+        lecture facultative dispose de sa propre coche de validation. La progression et le thème sont
+        mémorisés dans ce navigateur, sans compte. Effacer les données du site efface également cette
+        progression.
       </p>
       <p>
         <a href={pathTo('credits.txt')}>Crédits des polices et des icônes</a>
