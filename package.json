@@ -5,7 +5,7 @@
   "description": "Un atlas interactif des marchés et des produits dérivés, en français.",
   "type": "module",
   "engines": {
-    "node": ">=22.23.4"
+    "node": "24.x"
   },
   "scripts": {
     "dev": "astro dev",

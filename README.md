@@ -2,6 +2,8 @@
 
 Notionnel est un atlas interactif en français pour les personnes qui découvrent la finance. Une boulangère qui fixe le prix de son blé, un importateur qui doit des dollars et une réservation de vélo introduisent les mécanismes avant les termes techniques. À chaque étape, le lecteur peut consulter une définition, essayer un calcul et vérifier son raisonnement.
 
+[Ouvrir Notionnel](https://notionnel.vercel.app/) · [Essayer le simulateur](https://notionnel.vercel.app/simulateur/)
+
 ## Démarrer en local
 
 Installez Node.js 24 LTS avec npm, puis ouvrez un terminal à la racine du dépôt, dans le dossier qui contient `package.json`. Si vous utilisez nvm, `nvm install` puis `nvm use` sélectionnent la version indiquée dans `.nvmrc`. [Versions de Node.js](https://nodejs.org/en/about/previous-releases)
@@ -81,28 +83,18 @@ BASE_PATH=/mon-atlas npm run build
 BASE_PATH=/mon-atlas npm run preview
 ```
 
-## Publier le dépôt sur GitHub
+## Publier une mise à jour
 
-Le dossier Git livré contient déjà un premier commit sur `main`. **Si vous partez de l’archive ZIP**, initialisez d’abord Git depuis le dossier décompressé.
+Le code source est publié dans [youssefmir/notionnel](https://github.com/youssefmir/notionnel). Un envoi sur `main` déclenche les vérifications GitHub Actions.
 
-```sh
-git init -b main
-git add .
-git commit -m "Initialiser la plateforme pédagogique Notionnel"
-```
-
-Créez un dépôt vide sur GitHub et copiez l’URL HTTPS ou SSH affichée dans **Code**. Depuis le dépôt local, les commandes suivantes demandent cette URL et envoient la branche `main`. Si `git remote -v` affiche déjà le bon `origin`, seule la dernière commande est nécessaire.
+**Vercel.** Le projet de production s’appelle `notionnel` dans l’équipe `miryoussef16-6360`. La publication se fait avec la CLI Vercel. Depuis une copie propre du commit à publier, avec une session Vercel ouverte dans cette équipe :
 
 ```sh
-printf '%s\n' "Collez l’URL de votre dépôt GitHub puis appuyez sur Entrée."
-read -r depot
-git remote add origin "$depot"
-git push -u origin main
+npx vercel link --scope miryoussef16-6360 --project notionnel
+npx vercel deploy --prod --scope miryoussef16-6360
 ```
 
-## Déployer le site
-
-**Vercel.** Importez le dépôt depuis **Add New → Project** et sélectionnez la racine contenant `package.json`. La configuration fournie utilise le préréglage Astro, `npm ci`, la commande `npm run build` et le répertoire de sortie `dist`. Pour un domaine servi à la racine, laissez `BASE_PATH` vide. Vous pouvez renseigner `SITE_URL` avec l’origine publique du site. Lancez **Deploy**. [Guide Astro pour Vercel](https://docs.astro.build/en/guides/deploy/vercel/)
+Le préréglage Astro installe les dépendances avec `npm ci`, lance `npm run build` et sert le contenu de `dist/` à la racine du domaine. [Guide Astro pour Vercel](https://docs.astro.build/en/guides/deploy/vercel/)
 
 **GitHub Pages.** Sur GitHub, ouvrez **Settings → Pages → Build and deployment** et choisissez **GitHub Actions** comme source. Dans **Actions → Publier sur GitHub Pages → Run workflow**, choisissez `main` puis lancez le workflow. Il récupère le domaine et le sous-chemin auprès de Pages, exécute les tests unitaires, construit le site à cette adresse, puis publie `dist/`. Le lien final figure dans l’environnement `github-pages` du workflow. Pour publier une mise à jour, relancez-le sur la version souhaitée de `main`. [Configurer la source de publication dans GitHub Pages](https://docs.github.com/fr/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site)
 
