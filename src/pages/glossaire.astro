@@ -1,0 +1,21 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { renderGlossary } from '../lib/learning-view.js';
+---
+
+<Layout
+  title="Glossaire"
+  active="glossaire"
+  description="Les mots de la finance expliqués simplement, avec des exemples."
+>
+  <div class="tool-page page-wrap">
+    <header class="tool-head">
+      <div class="eyebrow mono">
+        <span></span> Repères <i>/</i> Dictionnaire
+      </div>
+      <h1>Le glossaire</h1>
+      <p>Un mot vous échappe ? Retrouvez sa définition et un exemple concret.</p>
+    </header>
+    <div set:html={renderGlossary()} />
+  </div>
+</Layout>

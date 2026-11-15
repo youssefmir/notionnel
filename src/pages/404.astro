@@ -1,0 +1,17 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { pathTo } from '../lib/catalog';
+---
+
+<Layout title="Page introuvable">
+  <div class="page-wrap tool-page">
+    <div class="tool-head">
+      <div class="eyebrow mono">Erreur 404</div>
+      <h1>Page introuvable</h1>
+      <p>Cette adresse ne correspond à aucune page du parcours.</p>
+    </div>
+    <a class="solid-button" href={pathTo()}>
+      Revenir à la vue d’ensemble →
+    </a>
+  </div>
+</Layout>

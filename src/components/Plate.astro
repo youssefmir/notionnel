@@ -1,0 +1,129 @@
+---
+interface Props {
+  id: number;
+}
+const { id } = Astro.props;
+const shades = [
+  ['#e8edfb', '#3959be', '#91a3e6'],
+  ['#e4efeb', '#20685c', '#8cbcaf'],
+  ['#f7e8db', '#9c552c', '#e2aa7e'],
+  ['#ede9f7', '#674580', '#b39ad2'],
+  ['#e2edf1', '#305f79', '#81a9bc'],
+  ['#f3e9e4', '#8d5649', '#d7a293'],
+];
+const [paper, ink, tint] = shades[(id - 1) % 6];
+const cube = (x: number, y: number, h: number, w: number) => ({
+  top: [x, y - h, x + w, y - h - w / 2, x + w * 2, y - h, x + w, y - h + w / 2].join(' '),
+  left: [x, y - h, x + w, y - h + w / 2, x + w, y + w / 2, x, y].join(' '),
+  right: [x + w, y - h + w / 2, x + 2 * w, y - h, x + 2 * w, y, x + w, y + w / 2].join(' '),
+});
+const uid = 'p' + id;
+---
+
+<div class="plate" style={'--plate-paper:' + paper + ';--plate-ink:' + ink}>
+  <div class="plate-mark mono">
+    <span></span>FIG. {String(id).padStart(2, '0')}
+  </div>
+  <svg viewBox="0 0 300 130" preserveAspectRatio="xMidYMid meet" fill="none" aria-hidden="true">
+    <defs>
+      <pattern
+        id={uid + 'h'}
+        width="5"
+        height="5"
+        patternUnits="userSpaceOnUse"
+        patternTransform="rotate(32)"
+      >
+        <path d="M0 0V5" stroke={ink} opacity=".42" stroke-width="1.5" />
+      </pattern>
+    </defs>
+    <g stroke={ink} stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
+      {id === 1 && (
+        <>
+          <path d="m69 97 71 21 92-34M70 102l70 21 93-35" opacity=".28" stroke-dasharray="3 4" />
+          {[cube(82, 91, 19, 21), cube(119, 82, 38, 21), cube(156, 73, 55, 21)].map((c) => (
+            <g>
+              <polygon points={c.left} fill={tint} />
+              <polygon points={c.right} fill={paper} />
+              <polygon points={c.right} fill={'url(#' + uid + 'h)'} />
+              <polygon points={c.top} fill={paper} />
+            </g>
+          ))}
+          <path d="m83 63 30-14 26-1 41-29m-9 0 10-1-2 9" stroke-dasharray="3 4" opacity=".65" />
+        </>
+      )}
+      {id === 2 && (
+        <>
+          <path d="M103 87 158 51 206 76M103 87 169 96 206 76" stroke-dasharray="4 4" />
+          {[
+            { x: 77, y: 73 },
+            { x: 130, y: 38 },
+            { x: 182, y: 63 },
+          ].map(({ x, y }) => (
+            <g>
+              {[12, 8, 4, 0].map((n) => (
+                <path d={'M' + x + ' ' + (y + n) + 'l22 -10 27 11 -22 11z'} fill={n === 0 ? paper : tint} />
+              ))}
+              <path d={'m' + (x + 12) + ' ' + (y + 1) + ' 11-5 14 5-11 5z'} fill={tint} stroke-width="1" />
+            </g>
+          ))}
+          <path d="M78 56q7-20 35-23m-5-3 6 3-4 5" opacity=".6" />
+        </>
+      )}
+      {id === 3 && (
+        <>
+          <path d="M112 109q30-27 63-88" stroke-width="2.7" />
+          {[0, 1, 2, 3].map((i) => (
+            <g transform={'translate(' + i * 10 + ' ' + -i * 16 + ')'}>
+              <path d="M126 93q-18-4-17-25 14 4 17 25Z" fill={tint} />
+              <path d="M126 93q4-17 25-18-5 16-25 18Z" fill={paper} />
+              <path d="m109 68-4-7m46 14 6-3" stroke-width="1.2" />
+            </g>
+          ))}
+          <path d="M166 30q0-16 12-22 4 13-12 22Z" fill={tint} />
+          <path d="m79 105 23-7m89-46 22-8m-22 13 37-12" opacity=".45" />
+        </>
+      )}
+      {id === 4 && (
+        <>
+          <path d="M79 101h151M89 111V18" opacity=".6" />
+          <path d="M89 76h130" stroke-dasharray="3 4" />
+          <path d="M90 90h52l63-65" stroke-width="3.5" />
+          <path d="m141 90 64-65v50h-50" fill={tint} opacity=".48" stroke="none" />
+          <circle cx="142" cy="90" r="4" fill={paper} />
+          <circle cx="156" cy="76" r="4" fill={paper} />
+          <path d="M142 94v8M156 81v20" opacity=".45" stroke-dasharray="2 3" />
+        </>
+      )}
+      {id === 5 && (
+        <>
+          <path d="M98 61q19-48 86-21m-6-10 9 11-13 5M202 72q-26 44-87 18m5 9-8-11 13-3" stroke-width="3" />
+          {[cube(66, 73, 19, 17), cube(183, 66, 19, 17)].map((c) => (
+            <g>
+              <polygon points={c.left} fill={tint} />
+              <polygon points={c.right} fill={paper} />
+              <polygon points={c.top} fill={paper} />
+            </g>
+          ))}
+          <path d="M104 65h79" stroke-dasharray="4 4" opacity=".4" />
+        </>
+      )}
+      {id === 6 && (
+        <>
+          <path d="M63 99h171m-151 5V23" opacity=".6" />
+          {Array.from({ length: 7 }, (_, i) => (
+            <path
+              d={'M79 89 Q110 ' + (62 - 4 * i) + ' 142 ' + (71 - i * 5) + ' T223 ' + (31 + i * 11)}
+              stroke={i === 3 ? ink : tint}
+              stroke-width={i === 3 ? 3 : 1.4}
+            />
+          ))}
+          <path d="M143 34v65" stroke-dasharray="3 4" opacity=".5" />
+          <circle cx="143" cy="56" r="4" fill={paper} />
+        </>
+      )}
+    </g>
+  </svg>
+  <span class="plate-cross" aria-hidden="true">
+    +
+  </span>
+</div>

@@ -1,0 +1,64 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { catalog, modulePath, pad, pathTo } from '../lib/catalog';
+const modules = await catalog();
+---
+
+<Layout title="Sources et méthode" active="sources">
+  <div class="tool-page page-wrap">
+    <header class="tool-head">
+      <div class="eyebrow mono">
+        <span></span> Notes de lecture
+      </div>
+      <h1>Sources et méthode</h1>
+      <p>Une référence théorique, des exemples conçus pour débuter.</p>
+    </header>
+    <article class="prose source-article">
+      <h2>Le manuel de référence</h2>
+      <p>
+        John C. Hull, <em>Options, futures et autres actifs dérivés</em>, 10ᵉ édition française, Pearson
+        France, 2017. ISBN : 978-2-3260-0156-5.
+      </p>
+      <h2>Comment lire le parcours</h2>
+      <p>
+        Chaque module commence par une situation familière, introduit le vocabulaire puis propose un calcul ou
+        une décision à expliquer. Les renvois « Dans le manuel » indiquent les sections où approfondir la
+        notion. Les récits, exemples chiffrés, illustrations et questions sont propres à Notionnel.
+      </p>
+      <table>
+        <thead>
+          <tr>
+            <th>Étape</th>
+            <th>Repères dans le manuel</th>
+          </tr>
+        </thead>
+        <tbody>
+          {modules.map(({ data: m }) => (
+            <tr>
+              <td>
+                <a href={modulePath(m.slug)}>
+                  {pad(m.id)} · {m.title}
+                </a>
+              </td>
+              <td>{m.chapter}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <h2>Les prix des exemples</h2>
+      <p>
+        Les prix et les scénarios sont fictifs. Dans le simulateur, les résultats portent sur une option
+        européenne et une unité de sous-jacent à l’échéance, sans frais ni coût de financement. La prime est
+        un paramètre choisi par le lecteur.
+      </p>
+      <h2>Votre progression</h2>
+      <p>
+        Deux bonnes réponses sur trois valident un module. La progression et le thème sont mémorisés dans ce
+        navigateur, sans compte. Effacer les données du site efface également cette progression.
+      </p>
+      <p>
+        <a href={pathTo('credits.txt')}>Crédits des polices et des icônes</a>
+      </p>
+    </article>
+  </div>
+</Layout>

@@ -1,0 +1,25 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { renderSimulator } from '../lib/simulator-view.js';
+import '../styles/simulator.css';
+---
+
+<Layout
+  title="Simulateur"
+  active="simulateur"
+  description="Explorez le gain ou la perte à l’échéance d’un call ou d’un put, à l’achat comme à la vente."
+>
+  <div class="tool-page page-wrap">
+    <header class="tool-head">
+      <div class="eyebrow mono">
+        <span></span> Laboratoire <i>/</i> Expérience 01
+      </div>
+      <h1>Simulateur d’options</h1>
+      <p>Choisissez un contrat et faites varier les prix pour explorer votre résultat à l’échéance.</p>
+    </header>
+    <div set:html={renderSimulator()} />
+  </div>
+  <script>
+    import '../scripts/simulator.js';
+  </script>
+</Layout>

@@ -1,0 +1,127 @@
+---
+import { ArrowRight, ArrowUpRight, BookOpen, Clock3, ListChecks, ChartNoAxesCombined } from '@lucide/astro';
+import Layout from '../layouts/Layout.astro';
+import Relief from '../components/Relief.astro';
+import Plate from '../components/Plate.astro';
+import { catalog, modulePath, pathTo, pad, labels } from '../lib/catalog';
+const modules = await catalog();
+const minutes = modules.reduce((s, m) => s + m.data.minutes, 0);
+---
+
+<Layout title="Vue d’ensemble" active="home">
+  <div class="dashboard page-wrap">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-text">
+        <div class="hero-kicker mono">
+          <span class="orange-rule"></span> Atlas de finance <i>/</i> Vol. 01
+        </div>
+        <h1 id="hero-title">
+          Les dérivés,
+          <br />
+          <em>en clair.</em>
+        </h1>
+        <p>Un parcours illustré pour comprendre les marchés et les produits dérivés, en partant de zéro.</p>
+        <a class="hero-cta" id="start-course" href={modulePath(modules[0].data.slug)}>
+          <span>Commencer le parcours</span>
+          <ArrowRight size={16} />
+        </a>
+      </div>
+      <div class="hero-figure">
+        <div class="fig-top mono">
+          <span>PLANCHE 001</span>
+          <span>✳</span>
+        </div>
+        <Relief />
+        <div class="fig-bottom mono">
+          FIG. A <i></i> ÉTUDE DE SURFACE
+        </div>
+      </div>
+    </section>
+    <div class="course-strip">
+      <span>
+        <BookOpen size={16} />
+        <b>{modules.length} modules</b>
+      </span>
+      <span>
+        <Clock3 size={16} />
+        <b>{minutes} min</b> de lecture
+      </span>
+      <span>
+        <ListChecks size={17} />
+        Quiz et simulateur
+      </span>
+    </div>
+    <section id="parcours" class="course-section" aria-labelledby="parcours-title">
+      <div class="section-line">
+        <div>
+          <div class="eyebrow mono">
+            <span></span> Le programme
+          </div>
+          <h2 id="parcours-title">Votre parcours</h2>
+          <p>Six étapes, des premiers repères aux mécanismes des dérivés.</p>
+        </div>
+        <a class="section-jump" href={pathTo('glossaire/')}>
+          <BookOpen size={15} /> Glossaire <ArrowUpRight size={14} />
+        </a>
+      </div>
+      <div class="module-grid">
+        {modules.map(({ data: m }) => {
+          const l = labels[m.id];
+          return (
+            <a class="module-card" href={modulePath(m.slug)} data-module-id={m.id} data-course-href={m.id}>
+              <Plate id={m.id} />
+              <div class="card-copy">
+                <div class="card-kicker mono">
+                  Module {pad(m.id)} <span>/</span> {l?.category || 'Approfondissement'}
+                </div>
+                <h3>{l?.name || m.title}</h3>
+                <p>{l?.desc || m.subtitle}</p>
+                <div class="card-foot">
+                  <span>
+                    <Clock3 size={13} />
+                    {m.minutes} min <span class="card-validated">· Validé ✓</span>
+                  </span>
+                  <span class="card-arrow">
+                    <ArrowRight size={16} />
+                  </span>
+                </div>
+              </div>
+            </a>
+          );
+        })}
+      </div>
+    </section>
+    <section class="practice-banner">
+      <div class="banner-icon">
+        <ChartNoAxesCombined size={27} />
+      </div>
+      <div>
+        <div class="eyebrow mono">L’atelier pratique</div>
+        <h2>Et si le cours changeait ?</h2>
+        <p>Modifiez un contrat d’option et observez son gain ou sa perte à l’échéance.</p>
+      </div>
+      <a class="solid-button" href={pathTo('simulateur/')}>
+        Ouvrir le simulateur <ArrowRight size={16} />
+      </a>
+    </section>
+  </div>
+  <script>
+    import { getCompleted } from '../scripts/learning.js';
+    function startLink() {
+      const done = getCompleted();
+      const items = [...document.querySelectorAll<HTMLAnchorElement>('[data-course-href]')];
+      const next = items.find((el) => !done.includes(Number(el.dataset.courseHref)));
+      const a = document.querySelector<HTMLAnchorElement>('#start-course');
+      if (!a) return;
+      if (!done.length) {
+        a.href = items[0].href;
+        a.querySelector('span')!.textContent = 'Commencer le parcours';
+        return;
+      }
+      a.href = next?.href || '#parcours';
+      a.querySelector('span')!.textContent = next ? 'Continuer le parcours' : 'Revoir les modules';
+    }
+    startLink();
+    document.addEventListener('atelier:progress', startLink);
+  </script>
+</Layout>

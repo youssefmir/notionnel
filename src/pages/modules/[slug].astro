@@ -1,0 +1,87 @@
+---
+import { render } from 'astro:content';
+import { ArrowLeft, ArrowRight, Clock3, BookOpen, SlidersHorizontal } from '@lucide/astro';
+import Layout from '../../layouts/Layout.astro';
+import { catalog, modulePath, pathTo, pad, labels } from '../../lib/catalog';
+import { renderQuiz } from '../../lib/learning-view.js';
+export async function getStaticPaths() {
+  return (await catalog()).map((entry) => ({ params: { slug: entry.data.slug }, props: { entry } }));
+}
+const { entry } = Astro.props;
+const m = entry.data;
+const { Content, headings } = await render(entry);
+const mods = await catalog();
+const index = mods.findIndex((item) => item.data.slug === m.slug);
+const next = mods[index + 1]?.data;
+const prev = mods[index - 1]?.data;
+---
+
+<Layout title={'Module ' + pad(m.id)} active={m.slug} description={m.subtitle}>
+  <div class="reader page-wrap">
+    <a class="back-link" href={pathTo() + '#parcours'}>
+      <ArrowLeft size={15} /> Tous les modules
+    </a>
+    <header class="lesson-title">
+      <div class="eyebrow mono">
+        <span></span> Module {pad(m.id)} <i>/</i> {labels[m.id]?.category || 'Approfondissement'}
+      </div>
+      <h1>{m.title}</h1>
+      <p>{m.subtitle}</p>
+      <div class="lesson-meta">
+        <span>
+          <Clock3 size={15} />
+          {m.minutes} min de lecture
+        </span>
+        <span>
+          <BookOpen size={15} />
+          {m.chapter}
+        </span>
+      </div>
+    </header>
+    <div class="lesson-layout">
+      <div class="reading-col">
+        <article class="prose">
+          <Content />
+        </article>
+        {m.id === 4 && (
+          <div class="mini-lab">
+            <SlidersHorizontal size={24} />
+            <div>
+              <strong>Tracer votre propre courbe</strong>
+              <p>Faites varier le cours final, le prix d’exercice et la prime.</p>
+              <a href={pathTo('simulateur/')}>
+                Essayer le simulateur <ArrowRight size={14} />
+              </a>
+            </div>
+          </div>
+        )}
+        <div id="quiz" set:html={renderQuiz(m.id)} />
+        <nav class="chapter-turn" aria-label="Changer de module">
+          <a href={prev ? modulePath(prev.slug) : pathTo()}>
+            <ArrowLeft size={15} />
+            {prev ? 'Module précédent' : 'Vue d’ensemble'}
+          </a>
+          <a href={next ? modulePath(next.slug) : pathTo() + '#parcours'}>
+            {next ? 'Module suivant' : 'Revoir le parcours'}
+            <ArrowRight size={15} />
+          </a>
+        </nav>
+      </div>
+      <aside class="in-page">
+        <p class="eyebrow mono">Dans ce module</p>
+        <ol>
+          {headings
+            .filter((h) => h.depth === 2)
+            .map((h) => (
+              <li>
+                <a href={'#' + h.slug}>{h.text}</a>
+              </li>
+            ))}
+          <li>
+            <a href="#quiz">Tester ma compréhension</a>
+          </li>
+        </ol>
+      </aside>
+    </div>
+  </div>
+</Layout>

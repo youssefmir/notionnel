@@ -1,0 +1,48 @@
+---
+// A folded wave projected onto a plane. Original editorial illustration.
+const point = (u: number, v: number) => {
+  const rise = 65 * Math.exp(-((u - 0.48 + 0.17 * Math.sin(v * 3.4)) ** 2) / 0.032);
+  const fold = 32 * Math.sin(6.9 * u - 3.1 * v + 0.4) + 26 * Math.sin(4.2 * v + 1.5 * u);
+  return [10 + 268 * u + 125 * v, 185 + 74 * u - 92 * v - rise - fold].map((n) => n.toFixed(1)).join(',');
+};
+const row = (v: number) => Array.from({ length: 40 }, (_, i) => point(i / 39, v)).join(' ');
+const col = (u: number) => Array.from({ length: 25 }, (_, i) => point(u, i / 24)).join(' ');
+---
+
+<svg class="relief" viewBox="-20 0 460 285" fill="none" aria-hidden="true">
+  <defs>
+    <linearGradient id="sheet" x1="0" y1="1" x2="1" y2="0" gradientUnits="objectBoundingBox">
+      <stop stop-color="#14286b" />
+      <stop offset=".45" stop-color="#4368df" />
+      <stop offset="1" stop-color="#7794ff" />
+    </linearGradient>
+  </defs>
+  <g stroke="#9fb2ff" stroke-width=".9">
+    {Array.from({ length: 36 }, (_, i) => {
+      const v = 1 - i / 35;
+      return (
+        <polygon
+          points={
+            row(v) +
+            ' ' +
+            row(Math.max(0, v - 1 / 35))
+              .split(' ')
+              .reverse()
+              .join(' ')
+          }
+          fill="url(#sheet)"
+          stroke-opacity=".77"
+        />
+      );
+    })}
+  </g>
+  <g stroke="#d1ddff" stroke-width=".76" opacity=".74">
+    {Array.from({ length: 34 }, (_, i) => (
+      <polyline points={col(i / 33)} />
+    ))}
+  </g>
+  <polyline points={row(0.0)} stroke="#c8d6ff" stroke-width="1.6" />
+  <g stroke="#ffb58b" stroke-width="2.5">
+    <polyline points={row(0.31)} />
+  </g>
+</svg>

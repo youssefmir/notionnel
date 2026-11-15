@@ -1,0 +1,179 @@
+---
+import {
+  LayoutGrid,
+  ChartNoAxesCombined,
+  BookOpen,
+  LibraryBig,
+  ChevronRight,
+  PanelLeft,
+  Sun,
+  Moon,
+  GraduationCap,
+  Menu,
+  X,
+  Check,
+} from '@lucide/astro';
+import Brand from '../components/Brand.astro';
+import { catalog, labels, pathTo, modulePath, pad } from '../lib/catalog';
+import '../styles/global.css';
+import '../styles/learning.css';
+const {
+  title,
+  active = '',
+  description = 'Un parcours gratuit pour comprendre les marchés et les produits dérivés, avec des exemples, des quiz et un simulateur.',
+  section = 'Espace d’apprentissage',
+} = Astro.props;
+const modules = await catalog();
+const items = [
+  { key: 'home', label: 'Vue d’ensemble', href: pathTo(), icon: LayoutGrid },
+  { key: 'simulateur', label: 'Simulateur', href: pathTo('simulateur/'), icon: ChartNoAxesCombined },
+  { key: 'glossaire', label: 'Glossaire', href: pathTo('glossaire/'), icon: BookOpen },
+];
+---
+
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#1c337d" />
+    <link rel="icon" type="image/svg+xml" href={pathTo('favicon.svg')} />
+    <title>{title} · Notionnel</title>
+    <script is:inline>
+      try {
+        const t = localStorage.getItem('notionnel:theme');
+        document.documentElement.dataset.theme =
+          t === 'dark' || (t !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches)
+            ? 'dark'
+            : 'light';
+      } catch {
+        document.documentElement.dataset.theme = matchMedia('(prefers-color-scheme: dark)').matches
+          ? 'dark'
+          : 'light';
+      }
+    </script>
+  </head>
+  <body>
+    <a class="skip" href="#contenu">
+      Aller au contenu
+    </a>
+    <div class="workspace">
+      <aside class="sidebar" id="navigation" aria-label="Navigation du parcours">
+        <div class="brand-block">
+          <Brand />
+          <button id="mobile-close" class="icon-button mobile-only" aria-label="Fermer le menu">
+            <X size={19} />
+          </button>
+        </div>
+        <nav class="side-nav" aria-label="Navigation principale">
+          <p class="nav-caption mono">Espace de travail</p>
+          {items.map((item) => (
+            <a
+              href={item.href}
+              class:list={['nav-item', { active: active === item.key }]}
+              aria-current={active === item.key ? 'page' : undefined}
+            >
+              <item.icon size={18} />
+              {item.label}
+            </a>
+          ))}
+          <div class="nav-rule"></div>
+          <p class="nav-caption mono">Les modules</p>
+          {modules.map(({ data: m }) => (
+            <a
+              href={modulePath(m.slug)}
+              data-module-id={m.id}
+              class:list={['module-nav', { active: active === m.slug }]}
+              aria-current={active === m.slug ? 'page' : undefined}
+            >
+              <span class="nav-digit mono">{pad(m.id)}</span>
+              <span>{labels[m.id]?.short || m.title}</span>
+              <Check class="done-icon" size={14} aria-label="Validé" />
+            </a>
+          ))}
+        </nav>
+        <div class="side-bottom">
+          <div class="progress-card">
+            <div class="progress-label">
+              <GraduationCap size={17} /> Ma progression
+            </div>
+            <div
+              class="progress-track"
+              role="progressbar"
+              aria-label="Progression du parcours"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              aria-valuenow="0"
+            >
+              <i data-progress-bar></i>
+            </div>
+            <div class="progress-detail">
+              <span>
+                <b data-progress-count>0</b> / {modules.length} modules validés
+              </span>
+              <span data-progress-percent>0 %</span>
+            </div>
+          </div>
+          <a
+            class="source-link"
+            href={pathTo('sources/')}
+            aria-current={active === 'sources' ? 'page' : undefined}
+          >
+            <LibraryBig size={15} /> Sources et méthode
+          </a>
+        </div>
+      </aside>
+      <button id="scrim" class="scrim" aria-label="Fermer le menu" hidden></button>
+      <div class="canvas">
+        <header class="topbar">
+          <div class="breadcrumb">
+            <button
+              id="mobile-open"
+              class="icon-button mobile-only"
+              aria-label="Ouvrir le menu"
+              aria-controls="navigation"
+              aria-expanded="false"
+            >
+              <Menu size={20} />
+            </button>
+            <PanelLeft size={16} class="crumb-icon" />
+            <a href={pathTo()} class="crumb-root">
+              <span>{section}</span>
+              <b class="mobile-brand">Notionnel.</b>
+            </a>
+            <ChevronRight size={13} />
+            <span>{title}</span>
+          </div>
+          <button type="button" id="theme-switch" class="theme-switch" aria-label="Changer de thème">
+            <Sun size={16} class="light-icon" />
+            <Moon size={16} class="dark-icon" />
+            <span class="theme-light">Mode clair</span>
+            <span class="theme-dark">Mode sombre</span>
+          </button>
+        </header>
+        <noscript>
+          <nav class="no-script-links" aria-label="Accès direct">
+            <a href={pathTo()}>Le parcours</a> · <a href={pathTo('glossaire/')}>Glossaire</a> ·{' '}
+            <a href={pathTo('simulateur/')}>Simulateur</a>
+          </nav>
+        </noscript>
+        <main id="contenu" tabindex="-1">
+          <slot />
+        </main>
+        <footer class="main-footer">
+          <span>
+            Notionnel<span class="brand-dot">.</span> <span class="footer-sub"> · L’atelier des dérivés</span>
+          </span>
+          <a href={pathTo('sources/')}>
+            Références pédagogiques <span aria-hidden="true">↗</span>
+          </a>
+        </footer>
+      </div>
+    </div>
+    <script>
+      import '../scripts/learning.js';
+      import '../scripts/shell.js';
+    </script>
+  </body>
+</html>
